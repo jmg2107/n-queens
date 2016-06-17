@@ -82,6 +82,9 @@
       var arr = this.get(rowIndex);
       var counter = 0;
 
+      if(arr.length === 0){
+        return false;
+      }
       for(var i = 0; i < arr.length; i++) {
           if(arr[i] !== 0) {
             counter++;
@@ -96,6 +99,10 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+
+      if(this.get(0) === undefined){
+        return false;
+      }
 
       var numRows = this.get(0).length;
       var conflict = false;
@@ -130,6 +137,11 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+
+      if(this.get(0) === undefined){
+        return false;
+      }
+
       var numRows = this.get(0).length;
       var conflict = false;
       for (var i = 0; i < numRows; i++){
@@ -157,16 +169,16 @@
         column = 0;
         length = numRows - rowInd;
       } else{
-        length = (numRows - column) - 1;
+        length = numRows - column;
       }
 
-      for(var i=rowInd;  i<=length; i++){
+      for(var i=0;  i<length; i++){
         //conditional
         //if there is a piece at that position, then increment the counter
-        if(this.get(i)[column] !== 0){
+        if(this.get(rowInd)[column] !== 0){
           counter++;
         }
-
+        rowInd++;
         column++;
       }
 
@@ -179,6 +191,10 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      if(this.get(0) === undefined){
+        return false;
+      }
+
       var numRows = this.get(0).length;
       var diag;
 
@@ -244,6 +260,10 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      if(this.get(0) === undefined){
+        return false;
+      }
+
       var numRows = this.get(0).length;
       var diag;
 

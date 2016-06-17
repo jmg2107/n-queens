@@ -42,37 +42,145 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solution = undefined; //fixme
+  //solution is the entire board
+  var solution = new Board({n:n}); //fixme
+  // place in stack, increment when we reach the last row of the stack
+  var counter = 0;
 
+  var recurseBoard = function(currentRowInd){
+
+    //base case
+    if(currentRowInd === n){
+      counter++;
+      return;
+    }
+
+    for(var i=0; i<n; i++){
+
+      //place the piece
+      solution.togglePiece(currentRowInd, i);
+
+      //check if we can place a token at this position
+      if(!solution.hasAnyRooksConflicts()){
+      //recurse
+        recurseBoard(currentRowInd+1, i);
+      }
+
+      //take the piece off
+      solution.togglePiece(currentRowInd, i);
+    }
+
+  }
   //will work similarly to the decision tree
   //may have to use recursion -> rockPaperScissors solution
   //place 1 piece on row 0, iterate through possibilities of
   //next possible spots per row.
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  recurseBoard(0);
+
+  console.log('Number of solutions for ' + n + ' rooks:', counter);
+  return counter;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
 
-  //seems to be another decision tree.
-  //place one piece on 0,0
-  //place second piece on 1,2
-  //place third piece on 3,1
+  //solution is the entire board
+  var solution = new Board({n:n}); //fixme
+  var result = [];
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  var recurseBoard = function(currentRowInd){
+
+    //base case
+    if(currentRowInd === n){
+
+      for(var i=0; i<n; i++){
+        var tempArr = solution.get(i);
+        var row = []
+        for(var j=0; j<n; j++){
+          row.push(tempArr[j]);
+        }
+        result[i]= row;
+
+      }
+      return;
+
+    }
+
+    for(var i=0; i<n; i++){
+
+      //place the piece
+      solution.togglePiece(currentRowInd, i);
+
+      //check if we can place a token at this position
+      if(!solution.hasAnyQueensConflicts()){
+      //recurse
+         recurseBoard(currentRowInd+1, i);
+      }
+
+      //take the piece off
+      solution.togglePiece(currentRowInd, i);
+    }
+
+  }
+  //will work similarly to the decision tree
+  //may have to use recursion -> rockPaperScissors solution
+  //place 1 piece on row 0, iterate through possibilities of
+  //next possible spots per row.
+
+  recurseBoard(0);
+
+  //we found no solution
+  if(result.length === 0){
+    result = solution.rows();
+  }
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(result));
+  return result;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solution = undefined; //fixme
+   //solution is the entire board
+  var solution = new Board({n:n}); //fixme
+  // place in stack, increment when we reach the last row of the stack
+  var counter = 0;
+
+  var recurseBoard = function(currentRowInd){
+
+    //base case
+    if(currentRowInd === n){
+      counter++;
+      console.log(n + " board is " + solution.rows());
+      return;
+    }
+
+    for(var i=0; i<n; i++){
+
+      //place the piece
+      solution.togglePiece(currentRowInd, i);
+
+      //check if we can place a token at this position
+      if(!solution.hasAnyQueensConflicts()){
+      //recurse
+        recurseBoard(currentRowInd+1, i);
+      }
+
+      //take the piece off
+      solution.togglePiece(currentRowInd, i);
+    }
+
+  }
+  //will work similarly to the decision tree
+  //may have to use recursion -> rockPaperScissors solution
+  //place 1 piece on row 0, iterate through possibilities of
+  //next possible spots per row.
+
+  recurseBoard(0);
+
+  console.log('Number of solutions for ' + n + ' queens:', counter);
+  return counter;
 
   //decision tree similar
   //to recurseive countNRooksSolution
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
 };
